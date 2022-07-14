@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <!-- First row with price data and gas data of BTC & ETH -->
+    <div class="row">
+        <div class="col-3">
+            <h2>Ethereum Price</h2>
+            ${{ eth_price['last'] }}
+        </div>
+        <div class="col 3">
+            <h2>Gas Price</h2>
+            {{ eth.gas_price / 1000000000 }} Gwei
+        </div>
+        <div class="col-3">
+            <h2>Bitcoin Price</h2>
+            ${{ btc_price['last'] }}
+        </div> 
+    </div>
+    <!-- Portfolio position held here -->
+    <div class="row">
+        <h2>Portfolio</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Asset</th>
+                    <th scope="col">Balance</th>
+                    <th scope="col">Value (USD)</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <!-- Latest Blocks and TX's now shown side by side here below portfolio -->
+    <!-- First is latest blocks iterating through the last 10 -->
+    <div class="row">
+        <div class="col-6">
+            <h3> Latest Blocks</h3>
+            <table class="table table-striped">
+                {% for block in latest_blocks %}
+                <tr>
+                    <td>
+                        <h5>Block #</h5>
+                        <a href="/block/{{ block.number}}">{{ block.number }}</a>
+                        <p> {{ (current_time - block.timestamp)|int }} seconds ago</p>
+                    </td>
+                    <td>
+                        <h5>Miner</h5>
+                        <a href="/address?address={{ block.miner }}">
+                            {% if block.miner.lower() in miners %}
+                                {{ miners[block.miner.lower()] }}
+                            {% else %}
+                                {{ block.miner.lower() }}
+                            {% endif %}</a>
+
+                        <p>
+                            {{ block.transaction|length }} transactions
+                        </p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <!-- Now we show the last 10 tx's from the most recent block -->
+        <div class="col-6">
+            <h3>Latest Transactions</h3>
+
+            <table class="table table-striped">
+                {% for transaction in latest_transactions %}
+                <tr>
+                    <td>
+                        <h5>Hash</h5>
+                        <p>
+                            <a href="/transaction/{{ transaction['hash'].hex() }}">{{ transaction['hash'].hex() }}</a>
+                        </p>
+                        <p>
+                            <strong>From</strong>   
+                            <a href="/address?address={{ transaction['from'] }}">
+                                {{ transaction['from'] }}</a>
+                        </p>
+                        <p>
+                            <strong>To</strong>
+                            <a href="/address?address={{ transaction['from'] }}">
+                                {{ transaction['to'] }}</a>
+                        </p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+       
+    
+</div>
+
+{% endblock %}
