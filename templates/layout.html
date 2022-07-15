@@ -5,13 +5,32 @@
     </head>
 
     <body>
-        <h1>
-            <a href="/">MultiFi</a>
-        </h1>
+        <div style="background: black;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6">
+                        <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/3dc88731-8409-4230-8900-ec1a114b7993/Logo.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220715%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220715T012643Z&X-Amz-Expires=86400&X-Amz-Signature=1cf608d16a08c3f2c7c641373480deace409b9b27dde42292f3417a08a780a5a&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Logo.png%22&x-id=GetObject" class="img-thumbnail" alt="...">
+                        <a href="/" class="navbar-brand" style="color: white"><h1>MultiFi</h1></a>
+                        <form class="d-flex" action="/address" method="get">
+                            <input class="form-control" placeholder="search by address" name="address" type="text" />&nbsp;
+                            <button class="btn btn-primary" type="submit">search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
 
         {% block content %}
         {% endblock %}
     </body>
-   
-
 </html>

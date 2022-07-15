@@ -4,7 +4,7 @@ import config, ccxt, time
 from flask import Flask, render_template, request, flash, redirect, url_for
 from web3 import Web3
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 w3 = Web3(Web3.HTTPProvider(config.Node_url))
 
 def get_eth_price():
@@ -24,8 +24,8 @@ def index():
     eth = w3.eth
 
     binance = ccxt.binance()
-    eth_price = get_eth_price
-    btc_price = get_btc_price
+    eth_price = get_eth_price()
+    btc_price = get_btc_price()
 
     latest_blocks = []
     for block_number in range(eth.block_number, eth.block_number-10, -1): #go ten blocks back increments of 1
@@ -82,3 +82,6 @@ def address():
 def block(block_number):
     block = w3.eth.get_block(int(block_number))
     return render_template('block.html', block=block)
+
+
+app.run()
